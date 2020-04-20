@@ -4,29 +4,84 @@ import "./App.css";
 import Header from "./Header.js";
 import Button from "./Button.js";
 import ChuckJokes from "./ChuckJokes.js";
-
+//import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       jokes: [],
+      newJokeText: "",
     };
 
     this.newJoke = this.newJoke.bind(this);
     this.getJokeFromArray = this.getJokeFromArray.bind(this);
+    this.createJoke = this.createJoke.bind(this);
+    this.updateNewJoke = this.updateNewJoke.bind(this);
+    this.sendNewJokeToDataBase = this.sendNewJokeToDataBase.bind(this);
+    this.logState = this.logState.bind(this);
   }
 
-  //let jokeArray = this.state.jokeArray <= give a new array of what is currently inside state
+  findJokeID() {}
 
-  //joke = {
-  //value: ""
-  //jokeID: jokeArray.length
-  //}
-  //jokeArray.push(joke)
-  //this.setState({
-  //jokeArray: jokeArray
-  //})
+  logState() {
+    console.log(this.state); //calling logState after setState is completed
+  }
+
+  sendNewJokeToDataBase(e) {
+    e.preventDefault();
+    console.log(this.state.newJokeText);
+    let joke = {
+      value: this.state.newJokeText,
+      jokeID: this.state.jokeArray.length,
+    };
+    let URL = "http://localhost:4000/jokes";
+    console.log(JSON.stringify(joke));
+    fetch(URL, {
+      method: "post",
+      body: JSON.stringify(joke), //converts joke object to JSON, then send that JSON to post requset
+      headers: { "Content-type": "application/json" },
+    })
+      .then(res => res.json())
+      .then(res => {
+        // this.setState({
+        //   newJokeText: "",
+        // });
+        fetch(URL, {
+          method: "get",
+        })
+          .then(res => res.json())
+          .then(res => {
+            this.setState(
+              {
+                jokeArray: res, //updating state array to a new joke array
+              },
+              this.logState
+            );
+          });
+        // console.log(res);
+      });
+  }
+
+  updateNewJoke(e) {
+    this.setState({
+      newJokeText: e.target.value, //set newJokeText state to whatever to text field.
+    });
+  }
+
+  createJoke() {
+    let jokeArray = this.state.jokeArray;
+    // <= give a new array of what is currently inside state
+
+    let joke = {
+      value: "",
+      jokeID: jokeArray.length,
+    };
+    jokeArray.push(joke);
+    this.setState({
+      jokeArray: jokeArray,
+    });
+  }
   getJokeFromArray() {
     //pull from array instead
     let index = this.getRandomInt(0, this.state.jokeArray.length - 1);
@@ -69,10 +124,25 @@ class App extends Component {
         <Header />
         <div className="body">
           <form className="form">
-            <input type="text" placeholder="Input joke ID"></input>
+            <input
+              type="text"
+              placeholder="Input joke ID"
+              value={this.state.findJokeID}
+            ></input>
             <input type="submit" value="submit"></input>
-            <input type="text" placeholder="Create Your Own Joke!"></input>
-            <input type="submit" value="submit"></input>
+          </form>
+          <form className="form">
+            <input
+              type="text"
+              placeholder="Create Your Own Joke!"
+              value={this.state.newJokeText}
+              onChange={this.updateNewJoke}
+            ></input>
+            <input
+              onClick={this.sendNewJokeToDataBase}
+              type="submit"
+              value="submit"
+            ></input>
           </form>
           <ChuckJokes text={this.state.jokes} jokeID={this.state.jokeID} />
           <Button push={this.getJokeFromArray} />
