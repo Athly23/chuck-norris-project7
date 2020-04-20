@@ -22,7 +22,7 @@ class App extends Component {
     this.sendNewJokeToDataBase = this.sendNewJokeToDataBase.bind(this);
     this.logState = this.logState.bind(this);
     this.findJokeID = this.findJokeID.bind(this);
-    this.receiveJokeFromID = this.receiveJokeFromID(this);
+    this.receiveJokeFromID = this.receiveJokeFromID.bind(this);
   }
 
   findJokeID(e) {
@@ -33,7 +33,7 @@ class App extends Component {
   }
 
   receiveJokeFromID(evt) {
-    // evt.preventDefault();
+    evt.preventDefault();
     let URL = `http://localhost:4000/jokes/${this.state.chuckID}`;
     fetch(URL)
       .then(res => res.json())
@@ -71,6 +71,8 @@ class App extends Component {
             this.setState(
               {
                 jokeArray: res, //updating state array to a new joke array
+                jokes: joke.value,
+                jokeID: joke.jokeID,
               },
               this.logState
             );
