@@ -12,6 +12,7 @@ class App extends Component {
     this.state = {
       jokes: [],
       newJokeText: "",
+      chuckID: "",
     };
 
     this.newJoke = this.newJoke.bind(this);
@@ -20,9 +21,24 @@ class App extends Component {
     this.updateNewJoke = this.updateNewJoke.bind(this);
     this.sendNewJokeToDataBase = this.sendNewJokeToDataBase.bind(this);
     this.logState = this.logState.bind(this);
+    this.findJokeID = this.findJokeID.bind(this);
+    this.receiveJokeFromID = this.receiveJokeFromID(this);
   }
 
-  findJokeID() {}
+  findJokeID(e) {
+    this.setState({
+      chuckID: e.target.value,
+    });
+    console.log(this.state.chuckID);
+  }
+
+  receiveJokeFromID(evt) {
+    // evt.preventDefault();
+    let URL = `http://localhost:4000/jokes/${this.state.chuckID}`;
+    fetch(URL)
+      .then(res => res.json())
+      .then(res => console.log(res));
+  }
 
   logState() {
     console.log(this.state); //calling logState after setState is completed
@@ -127,9 +143,14 @@ class App extends Component {
             <input
               type="text"
               placeholder="Input joke ID"
-              value={this.state.findJokeID}
+              value={this.state.chuckID}
+              onChange={this.findJokeID}
             ></input>
-            <input type="submit" value="submit"></input>
+            <input
+              onClick={this.receiveJokeFromID}
+              type="submit"
+              value="submit"
+            ></input>
           </form>
           <form className="form">
             <input
