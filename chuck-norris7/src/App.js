@@ -23,6 +23,7 @@ class App extends Component {
     this.logState = this.logState.bind(this);
     this.findJokeID = this.findJokeID.bind(this);
     this.receiveJokeFromID = this.receiveJokeFromID.bind(this);
+    this.deleteJokeFromID = this.deleteJokeFromID.bind(this);
   }
 
   findJokeID(e) {
@@ -32,12 +33,38 @@ class App extends Component {
     console.log(this.state.chuckID);
   }
 
+  deleteJokeFromID(e) {
+    e.preventDefault();
+    console.log("delete run");
+    let URL = `http://localhost:4000/jokes/${this.state.chuckID}`;
+    fetch(URL, {
+      method: "DELETE",
+    })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          chuckID: res,
+        });
+      });
+  }
+
   receiveJokeFromID(evt) {
     evt.preventDefault();
     let URL = `http://localhost:4000/jokes/${this.state.chuckID}`;
     fetch(URL)
       .then(res => res.json())
-      .then(res => console.log(res));
+      .then(res => {
+        if (res[0]) {
+          this.setState({
+            jokeID: res[0].jokeID,
+            jokes: res[0].value,
+          });
+        } else {
+          alert("Joke does not exist!");
+        }
+
+        // console.log(res[0].value);
+      });
   }
 
   logState() {
@@ -145,11 +172,22 @@ class App extends Component {
             <input
               type="text"
               placeholder="Input joke ID"
-              value={this.state.chuckID}
               onChange={this.findJokeID}
             ></input>
             <input
               onClick={this.receiveJokeFromID}
+              type="submit"
+              value="submit"
+            ></input>
+          </form>
+          <form>
+            <input
+              type="text"
+              placeholder="Input joke ID to DELETE"
+              onChange={this.findJokeID}
+            ></input>
+            <input
+              onClick={this.deleteJokeFromID}
               type="submit"
               value="submit"
             ></input>
