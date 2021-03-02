@@ -36,7 +36,7 @@ class App extends Component {
   deleteJokeFromID(e) {
     e.preventDefault();
     console.log("delete run");
-    let URL = `https://cors-anywhere.herokuapp.com/https://chuck-norris-jokes-api.herokuapp.com/jokes/${this.state.chuckID}`;
+    let URL = `https://chuck-norris-jokes-api.herokuapp.com/jokes/${this.state.chuckID}`;
     fetch(URL, {
       method: "DELETE",
     })
@@ -50,7 +50,7 @@ class App extends Component {
 
   receiveJokeFromID(evt) {
     evt.preventDefault();
-    let URL = `https://cors-anywhere.herokuapp.com/https://chuck-norris-jokes-api.herokuapp.com/jokes/${this.state.chuckID}`;
+    let URL = `https://chuck-norris-jokes-api.herokuapp.com/jokes/${this.state.chuckID}`;
     fetch(URL)
       .then(res => res.json())
       .then(res => {
@@ -78,8 +78,7 @@ class App extends Component {
       value: this.state.newJokeText,
       jokeID: this.state.jokeArray.length,
     };
-    let URL =
-      "https://cors-anywhere.herokuapp.com/https://chuck-norris-jokes-api.herokuapp.com/jokes";
+    let URL = "https://chuck-norris-jokes-api.herokuapp.com/jokes";
     console.log(JSON.stringify(joke));
     fetch(URL, {
       method: "post",
@@ -138,8 +137,7 @@ class App extends Component {
   }
 
   newJoke() {
-    let URL =
-      "https://cors-anywhere.herokuapp.com/https://chuck-norris-jokes-api.herokuapp.com/jokes"; //READ
+    let URL = "https://chuck-norris-jokes-api.herokuapp.com/jokes"; //READ
     // "https://cors-anywhere.herokuapp.com/https://chuck-norris-jokes-api.herokuapp.com/jokes";
     fetch(URL)
       .then(res => res.json())
